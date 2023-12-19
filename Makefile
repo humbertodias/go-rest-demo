@@ -1,4 +1,4 @@
-TAG_NAME=$(shell git describe --abbrev=0 --tags)
+TAG_NAME=$(shell git describe --always --abbrev=0 --tags)
 APP_NAME=rest-demo
 MAC_EXE=$(APP_NAME)-darwin-amd64-$(TAG_NAME).app
 LIN_EXE=$(APP_NAME)-linux-amd64-$(TAG_NAME)
@@ -9,6 +9,12 @@ run:
 
 init:
 	mkdir -p dist
+
+
+build-mac-arm:  init
+	GOOS=darwin GOARCH=arm64 go build -o dist/$(MAC_EXE)
+	chmod +x dist/$(MAC_EXE)
+	tar zcvf dist/$(MAC_EXE).tar.gz -C dist $(MAC_EXE)
 
 build-mac:  init
 	GOOS=darwin GOARCH=amd64 go build -o dist/$(MAC_EXE)
